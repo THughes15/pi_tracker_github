@@ -9,15 +9,26 @@ urlDict = {'https://thepihut.com/products/raspberry-pi-4-model-b': {'4B (1Gb)': 
            'https://thepihut.com/collections/raspberry-pi/products/raspberry-pi-3-model-b-plus': {'3A': '18157318733886'},
            'https://thepihut.com/collections/raspberry-pi/products/raspberry-pi-pico': {'Pico': '37979757412547'}}
 
-savedDict = {'4B (1Gb)': 'Sold out', '4B (2Gb)': 'Sold out', '4B (4Gb)': 'Sold out', '4B (8Gb)': 'Sold out', '3B': 'Sold out', '3A': 'Sold out', 'Pico': 'In stock, ready to be ship'}
+# savedDict = {'4B (1Gb)': 'Sold out', '4B (2Gb)': 'Sold out', '4B (4Gb)': 'Sold out', '4B (8Gb)': 'Sold out', '3B': 'Sold out', '3A': 'Sold out', 'Pico': 'In stock, ready to be shipped'}
+savedDict = {}
 statusDict = {}
 x = 0
 
 selector = '#shopify-section-product-template > section > div.container.container--flush > div.product-block-list.product-block-list--medium > div > div.product-block-list__item.product-block-list__item--info > div > script'
 
+def getSaved():
+    for url in urlDict:
+
+        inventories = getInventories(url)
+        for item in urlDict[url]:
+            num = urlDict[url][item]
+            msg = inventories[num]['inventory_message']
+            savedDict[item] = msg
+
+    return savedDict
+
 
 def getInventories(url):
-
     res = requests.get(url)
     res.raise_for_status()
 
@@ -29,7 +40,6 @@ def getInventories(url):
 
 
 def sendEmail(item, status, url):
-
     conn = smtplib.SMTP(host, port, timeout=120)
     conn.ehlo()
     conn.starttls()
@@ -42,22 +52,19 @@ def sendEmail(item, status, url):
 
 
 def main():
-
     global savedDict, x
     for url in urlDict:
-
         inventories = getInventories(url)
-        for item in urlDict[url]:
 
+        for item in urlDict[url]:
             num = urlDict[url][item]
             msg = inventories[num]['inventory_message']
             statusDict[item] = msg
-            status = statusDict[item]
-            if statusDict[item] != savedDict[item]:
 
-                email = f'{item}: {status}: {url}'
+            if statusDict[item] != savedDict[item]:
+                email = f'{item}: {statusDict[item]}: {url}'
                 print(email)
-                sendEmail(item, status, url)
+                sendEmail(item, statusDict[item], url)
                 savedDict = statusDict
             else:
                 pass
@@ -68,6 +75,11 @@ def main():
     main()
 
 if __name__ == '__main__':
+    savedDict = getSaved()
     main()
+
+# TODO: update to fit PEP
+# TODO: add functionality to track from Farnell and other websites
+
 
 
