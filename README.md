@@ -1,7 +1,7 @@
 # pi_tracker_github
 
 Project to track the inventory status of Raspberry Pi Models from thepihut.com,
-the code uses beutifulsoup4 and requests module to check the status of various Pi models,
+the code uses beautifulsoup4 and requests module to check the status of various Pi models,
 and smtplib to send an email each time the status changes.
 
 Before runnning, Config.py needs to be updated to include desired Sender and Reciever Email addresses,
