@@ -6,4 +6,4 @@ and smtplib to send an email each time the status changes.
 
 Before runnning, Config.py needs to be updated to include desired Sender and Reciever Email addresses,
 along with sender email exchange info, and password.
-(For gmail, the password required in an app password, not the password used to sign into the account, may be the same for other exchanges)
+(For gmail, the password required is an app password, not the password used to sign into the account, may be the same for other exchanges)
