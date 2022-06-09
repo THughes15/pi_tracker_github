@@ -41,7 +41,7 @@ def get_inventories(url):
 
     soup = bs4.BeautifulSoup(res.text, 'html.parser')
     element = soup.select(SELECTOR)
-    data = json.loads(element[0].text)
+    data = json.loads(element[0].string)
     inventories = (data['inventories'])
     return inventories
 
@@ -89,3 +89,4 @@ if __name__ == '__main__':
     main()
 
 # TODO: add functionality to track from Farnell and other websites
+# TODO: add model selection feature
